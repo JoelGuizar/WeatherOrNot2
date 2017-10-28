@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchWeather } from '../actions/index';
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props);
 
@@ -15,6 +18,9 @@ export default class SearchBar extends Component {
 
   onFormSubmit(event) {
     event.preventDefault();
+
+    this.props.fetchWeather(this.state.term);
+    this.setState({ term: '' });
   }
 
   render () {
@@ -32,3 +38,12 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+//connecting action to component/function
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ fetchWeather }, dispatch);
+}
+
+//null is there because first argument maintains state
+//we don't need state here, but the mapDispatchToProps is the 2nd argument needed
+export default connect(null, mapDispatchToProps)(SearchBar);
